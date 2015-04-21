@@ -1,4 +1,4 @@
-name := """NameParser"""
+name := """CSVParser"""
 
 version := "1.0"
 
