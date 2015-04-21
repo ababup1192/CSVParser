@@ -1,18 +1,17 @@
 package org.ababup1192
 
+import org.ababup1192.ParserSimulator.LinesParser
 import org.scalatest._
 
 class ParserSpec extends FlatSpec with Matchers {
-  "Martin Odersky" should "has FirstName and Last name" in {
-    val parseResult = NameParser.parse("Martin Odersky")
-    val name = parseResult.get
-    name should be(Name("Martin", None, "Odersky"))
-  }
-
- "John F Kennedy" should "has FirstName, Middle name and Last name" in {
-    val parseResult = NameParser.parse("John F Kennedy")
-    val name = parseResult.get
-    name should be(Name("John", Some("F"), "Kennedy"))
+  "Lines parser" should "return lines List" in {
+    val parseResult = LinesParser.parse(
+      """name,age,place
+        John,17,NewYork
+        Mike,23,Soul
+      """)
+    val lines = parseResult.get
+    lines should be(List("name,age,place", "John,17,NewYork", "Mike,23,Soul"))
   }
 
 }
