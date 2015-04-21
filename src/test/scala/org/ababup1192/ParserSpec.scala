@@ -1,6 +1,6 @@
 package org.ababup1192
 
-import org.ababup1192.ParserSimulator.LinesParser
+import org.ababup1192.ParserSimulator.{Line, LinesParser}
 import org.scalatest._
 
 class ParserSpec extends FlatSpec with Matchers {
@@ -11,7 +11,7 @@ class ParserSpec extends FlatSpec with Matchers {
         Mike,23,Soul
       """)
     val lines = parseResult.get
-    lines should be(List("name,age,place", "John,17,NewYork", "Mike,23,Soul"))
+    lines should be(List(Line("name,age,place"), Line("John,17,NewYork"), Line("Mike,23,Soul")))
   }
 
 }

@@ -12,15 +12,16 @@ object ParserSimulator {
     println(res)
   }
 
+  case class Line(line: String)
 
   object LinesParser extends RegexParsers {
     def eol = opt('\r') <~ '\n'
 
-    def line = ".*".r <~ eol
+    def line = ".*".r <~ eol ^^ { line => Line(line) }
 
     def lines = rep(line)
 
-    def parse(input: String): ParseResult[List[String]] = parseAll(lines, input)
+    def parse(input: String): ParseResult[List[Line]] = parseAll(lines, input)
 
   }
 
