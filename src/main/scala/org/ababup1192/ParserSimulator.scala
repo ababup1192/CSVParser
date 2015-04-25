@@ -7,7 +7,9 @@ object ParserSimulator {
         John,17,NewYork
         Mike,23,Soul
       """)
-    println(res)
+    res.get.foreach {
+      println(_)
+    }
   }
 
 }

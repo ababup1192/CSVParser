@@ -2,7 +2,6 @@ package org.ababup1192
 
 import org.scalatest._
 
-// This spec should be failed.
 class ParserSpec extends FlatSpec with Matchers{
   "CSV parser" should "return Row List" in {
     val parseResult = CsvParser.parse(
