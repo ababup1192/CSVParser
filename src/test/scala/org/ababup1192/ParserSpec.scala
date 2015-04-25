@@ -1,17 +1,18 @@
 package org.ababup1192
 
-import org.ababup1192.ParserSimulator.{Line, LinesParser}
 import org.scalatest._
 
-class ParserSpec extends FlatSpec with Matchers {
-  "Lines parser" should "return lines List" in {
-    val parseResult = LinesParser.parse(
+// This spec should be failed.
+class ParserSpec extends FlatSpec with Matchers{
+  "CSV parser" should "return Row List" in {
+    val parseResult = CsvParser.parse(
       """name,age,place
         John,17,NewYork
         Mike,23,Soul
       """)
     val lines = parseResult.get
-    lines should be(List(Line("name,age,place"), Line("John,17,NewYork"), Line("Mike,23,Soul")))
+    lines should be(
+      List(HeaderRow(List("name", "age", "place")), DataRow(List("John", "17", "NewYork")), DataRow(List("Mike", "23", "Soul"))))
   }
 
 }
