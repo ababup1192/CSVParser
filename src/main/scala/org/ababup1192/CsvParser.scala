@@ -19,11 +19,13 @@ case class DataRow(cells: List[String]) extends Row {
 object CsvParser extends RegexParsers {
   def eol = opt('\r') <~ '\n'
 
-  def line = ".*".r <~ eol
+  def cell = "\"" ~> "[^\"]*".r <~ "\""
 
-  def headerRow = line ^^ { row => new HeaderRow(row.split(",").toList) }
+  def row = repsep(cell, ",") <~ eol
 
-  def dataRow = line ^^ { row => new DataRow(row.split(",").toList) }
+  def headerRow = row ^^ { cells => new HeaderRow(cells) }
+
+  def dataRow = row ^^ { cells => new DataRow(cells) }
 
   def all = headerRow ~ rep(dataRow) ^^ { res => res._1 :: res._2 }
 
