@@ -17,18 +17,33 @@ case class DataRow(cells: List[String]) extends Row {
 }
 
 object CsvParser extends RegexParsers {
+  override val whiteSpace = "[ \t]+".r
+
   def eol = opt('\r') <~ '\n'
 
-  def cell = "\"" ~> "[^\"]*".r <~ "\""
+  def notQuotedCell = "[^\"\r\n,]*".r
 
-  def row = repsep(cell, ",") <~ eol
+  def quotedCell = "\"" ~> "[^\"]*".r <~ "\""
 
-  def headerRow = row ^^ { cells => new HeaderRow(cells) }
+  def row = repsep(quotedCell | notQuotedCell, ",")
 
-  def dataRow = row ^^ { cells => new DataRow(cells) }
+  def rows = repsep(row, eol) ^^ {
+    case cellsList => {
+      cellsList match {
+        case Nil => Nil
+        case hCells :: dCellsList =>
+          val hRow = new HeaderRow(hCells)
+          val dRows = dCellsList filter {
+            // remove empty line
+            case l => l.size != 1 || !l.head.trim.isEmpty
+          } map {
+            case dr => new DataRow(dr)
+          }
+          hRow :: dRows
+      }
+    }
+  }
 
-  def all = headerRow ~ rep(dataRow) ^^ { res => res._1 :: res._2 }
-
-  def parse(input: String): ParseResult[List[Row]] = parseAll(all, input)
+  def parse(input: String): ParseResult[List[Row]] = parseAll(rows, input)
 
 }
